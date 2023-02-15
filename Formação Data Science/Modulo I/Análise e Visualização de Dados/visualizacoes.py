@@ -50,4 +50,40 @@ sns.boxplot(y=medias_por_filme)
 
 avaliacoes_por_filme = notas.groupby("filmeID").count()["usuarioID"]
 
-#Média ponderada
+
+#############################################################################################################################
+# Desafio. Criar Novo dataframe agrupados com ID com contagem de usuario, media de voto e tantar calcular a media ponderada #
+#############################################################################################################################
+import numpy as np
+
+# numpy - media pondera
+media = np.average(medias_por_filme)
+ponderada = np.average(medias_por_filme, weights=avaliacoes_por_filme)
+
+# pandas juntando series
+geral = pd.merge(avaliacoes_por_filme,medias_por_filme, how='inner', on='filmeID')
+
+# Criar coluna calculada para validar filmes com média acima da ponderada
+validacao = medias_por_filme / ponderada
+
+# Juntou a coluna calculada ao dataframe geral
+classificacao = pd.merge(geral,validacao, how='inner', on='filmeID')
+
+# filtrou filmes com média acima da ponderada
+class_filtro = classificacao.query('nota_y > 1')
+
+# Criou uma coluna calculada para criterio de ordenação em ralação ao peso (validação e Qtd de votos)
+criterio = class_filtro.nota_x * class_filtro["usuarioID"]
+
+# Juntou a coluna de criterio ao dataframe filtrado
+final = pd.merge(class_filtro,criterio.to_frame(), how='inner', on='filmeID')
+
+# Renomeou as colnas
+final.columns = ["QTD_Votos", "Média_Notas", "Validação","Criterio"]
+
+# ordenou o dataframe em relação ao criterio
+class_ord = final.sort_values(by=["Criterio"], ascending=False)
+
+#descobrindo filme com maior votos, top 10
+Tier10 = pd.merge(class_ord,filmes, how='left',on='filmeID').head(10)
+
