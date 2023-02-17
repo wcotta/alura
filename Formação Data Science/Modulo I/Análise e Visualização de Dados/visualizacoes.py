@@ -86,4 +86,3 @@ class_ord = final.sort_values(by=["Criterio"], ascending=False)
 
 #descobrindo filme com maior votos, top 10
 Tier10 = pd.merge(class_ord,filmes, how='left',on='filmeID').head(10)
-
