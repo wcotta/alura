@@ -149,3 +149,50 @@ dados.Altura.hist(bins = 50, figsize=(12,6))
 
 dist_freq_quant['Frequência'].plot.bar(width = 1, color= 'blue', alpha = 0.2, figsize=(12,6))
 
+#######DESAFIO##########
+
+Q1 = dados.Renda.quantile(.25)
+Q3 = dados.Renda.quantile(.75)
+IIQ = Q3 - Q1
+limite_inferior = Q1 - 1.5 * IIQ
+limite_superior = Q3 + 1.5 * IIQ
+selecao = (dados.Renda>=limite_inferior) & (dados.Renda<=limite_superior)
+dados_new = dados[selecao]
+
+n1 = dados_new.shape[0]
+k1= (1 + (10/3) * np.log10(n)).round(0)
+k1 = int(k)
+
+freq_class1 = pd.value_counts(
+    pd.cut(
+    x =dados_new.Renda,
+    bins = k1,
+    include_lowest=True
+    ), sort=False
+).round(0)
+
+perc_class1 = pd.value_counts(
+    pd.cut(
+    x =dados_new.Renda,
+    bins = k1,
+    include_lowest=True
+    ), sort=False, normalize=True
+)*100
+dist_freq_numpy1 = pd.DataFrame(
+    {'Frequência': freq_class1, 'Porcentagem (%)': perc_class1}
+)
+
+dist_freq_numpy1['Frequência'].plot.bar(width = 1, color= 'grey', alpha = 1, figsize=(12,6))
+
+dados_new.Renda.hist(bins = k)
+
+sns.histplot(dados_new.Renda, 
+             stat='density', 
+             bins=k)
+sns.kdeplot(dados_new.Renda, 
+            fill=True, 
+            bw_adjust=5, 
+            cut = 3)
+
+#bins quantidade de classes
+#bw_adjust suavisa 
