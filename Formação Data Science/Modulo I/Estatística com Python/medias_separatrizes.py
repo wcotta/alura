@@ -52,3 +52,4 @@ ax.figure.set_size_inches(12, 4)
 ax.set_title('Anos de Estudo', fontsize=18)
 ax.set_xlabel('Anos', fontsize=14)
 ax
+
