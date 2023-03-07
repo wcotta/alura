@@ -58,3 +58,4 @@ ax= sns.lmplot(x="temp_max", y="consumo", data=dados, col = 'fds')
 ax.fig.suptitle('Reta de Regressao - Consumo X Temperatura', fontsize=16, y=1.02)
 ax.set_xlabels("Temperatura Máxima (°C)", fontsize=14)
 ax.set_ylabels("Consumo de Cerveja (litros)", fontsize=14)
+
